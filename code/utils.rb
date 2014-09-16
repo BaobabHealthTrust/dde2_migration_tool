@@ -6,6 +6,12 @@ module Utils
   
     def self.cleanup_directories
 
+      if !File.exists?("./backups")
+
+        Dir.mkdir("./backups")
+
+      end
+
       if File.exists?("./data")
       
         FileUtils.mv("./data","./backups/data#{Time.now.to_s.gsub(/\s/,"_").gsub(/\:/,"_").gsub(/\+/,"_").gsub(/\-/,"_")}")
