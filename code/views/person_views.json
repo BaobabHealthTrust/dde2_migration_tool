@@ -1,0 +1,124 @@
+{"docs": [
+    {
+        "_id": "_design/Person",
+        "language": "javascript",
+        "views": {
+            "by__id": {
+                "map": "function(doc) {\n                  if ((doc['type'] == 'Person') && (doc['_id'] != null) && doc['assigned_site'] != '???') {\n                    emit(doc['_id'], 1);\n                  }\n                }"
+            },
+            "by_old_identification_number": {
+                "map": "                function(doc) {\n                  if ((doc['type'] == 'Person') && (doc['old_identification_number'] != null)) {\n                    emit(doc['old_identification_number'], 1);\n                  }\n                }\n",
+                "reduce": "_sum"
+            },
+            "by_assigned_site": {
+                "map": "function(doc) {\n                  if ((doc['type'] == 'Person') && (doc['assigned_site'] != null) && doc['assigned_site'] != '???') {\n                    emit(doc['assigned_site'], 1);\n                  }\n                }"
+            },
+            "by_gender": {
+                "map": "function(doc) {\n                  if ((doc['type'] == 'Person') && (doc['gender'] != null) && doc['assigned_site'] != '???') {\n                    emit(doc['gender'], 1);\n                  }\n                }"
+            },
+            "by_gender_and_assigned_site": {
+                "map": "function(doc) {\n                  if ((doc['type'] == 'Person') && (doc['gender'] != null) && (doc['assigned_site'] != null) && doc['assigned_site'] != '???') {\n                    emit([doc['gender'], doc['assigned_site']], 1);\n                  }\n                }"
+            },
+            "all": {
+                "map": "                function(doc) {\n                  if (doc['type'] == 'Person') {\n                    emit(doc._id, null);\n                  }\n                }\n"
+            },
+            "search": {
+                "map": "function(doc){\n            if (doc['type'] == 'Person' && doc['assigned_site'] != '???' ){\n              emit([doc.names.given_name_code ,doc.names.family_name_code, doc.gender], null);\n            }\n          }"
+            },
+            "advanced_search": {
+                "map": "function(doc){\n            if (doc['type'] == 'Person' && doc['assigned_site'] != '???' ){\n              emit([doc.names.given_name_code,doc.names.family_name_code, doc.gender, (new Date(doc.birthdate)).getFullYear(),doc.addresses.home_ta ,doc.addresses.home_district], null);\n            }\n          }"
+            },
+            "search_with_dob": {
+                "map": "function(doc){\n            if (doc['type'] == 'Person' && doc['assigned_site'] != '???' ){\n              emit([doc.names.given_name_code ,doc.names.family_name_code, doc.gender, (new Date(doc.birthdate)).getFullYear()], null);\n            }\n          }"
+            },
+            "search_with_home_district": {
+                "map": "function(doc){\n            if (doc['type'] == 'Person' && doc['assigned_site'] != '???' ){\n              emit([doc.names.given_name_code ,doc.names.family_name_code, doc.gender, doc.addresses.home_district], null);\n            }\n          }"
+            },
+            "search_with_home_ta": {
+                "map": "function(doc){\n            if (doc['type'] == 'Person' && doc['assigned_site'] != '???' ){\n              emit([doc.names.given_name_code ,doc.names.family_name_code, doc.gender, doc.addresses.home_ta], null);\n            }\n          }"
+            },
+            "search_with_home_ta_district": {
+                "map": "function(doc){\n            if (doc['type'] == 'Person' && doc['assigned_site'] != '???' ){\n              emit([doc.names.given_name_code ,doc.names.family_name_code, doc.gender, doc.addresses.home_ta, doc.addresses.home_district], null);\n            }\n          }"
+            },
+            "search_with_dob_home_ta": {
+                "map": "function(doc){\n            if (doc['type'] == 'Person' && doc['assigned_site'] != '???' ){\n              emit([doc.names.given_name_code ,doc.names.family_name_code, doc.gender,(new Date(doc.birthdate)).getFullYear() ,doc.addresses.home_ta], null);\n            }\n          }"
+            },
+            "search_with_dob_home_district": {
+                "map": "function(doc){\n            if (doc['type'] == 'Person' && doc['assigned_site'] != '???' ){\n              emit([doc.names.given_name_code ,doc.names.family_name_code, doc.gender, (new Date(doc.birthdate)).getFullYear(),doc.addresses.home_district], null);\n            }\n          }"
+            },
+            "search_by_all_identifiers": {
+                "map": "function(doc) {\n\t          if ((doc['type'] == 'Person' && doc['assigned_site'] != '???' && doc['patient']['identifiers'].length > 0)) {\n\t\t          for(var i in doc['patient']['identifiers']){\n              \t  \t\temit(doc['patient']['identifiers'][i][Object.keys(doc['patient']['identifiers'][i])[0]], 1);\n\t\t          }\t\t          \n\t          }\n          }"
+            },
+            "by_voided": {
+                "map": "function(doc) {\n              if(doc.assigned_site == '???'){\n                emit(doc._id, null);\n              }\n            }"
+            },
+            "by_temporary_id": {
+                "map": "function(doc) {\n          \tString.prototype.checkDigit = function(){\n          \t\tvar digits = this.trim().replace(/-/,'').split('').reverse();         \n          \t\tvar sum = 0;          \n          \t\tfor(var i = 0; i < digits.length; i++){          \n            \t\t\tvar digit = parseInt(digits[i]);            \n            \t\t\tif(i % 2 > 0){            \n              \t\t\t\tdigit *= 2;              \n              \t\t\t\tif(digit > 9){              \n                \t\t\t\tvar num = String(digit).split('');                \n                \t\t\t\tdigit = 0;                \n                \t\t\t\tfor(var j = 0; j < num.length; j++){                  \n                  \t\t\t\t\tdigit += parseInt(num[j]);                \n                \t\t\t\t}              \n              \t\t\t\t}            \n            \t\t\t}            \n            \t\t\tsum += digit;          \n          \t\t}          \n          \t\treturn (sum * 9) % 10;\n\t        };\n\t        String.prototype.toDecimal = function(){\n          \t\tvar separator = '-'\n          \t\t// we are taking out letters B, I, O, Q, S, Z because they might be\n          \t\t// mistaken for 8, 1, 0, 0, 5, 2 respectively\n          \t\tvar base_map = ['0','1','2','3','4','5','6','7','8','9','A','C','D','E','F','G',\n                        \t'H','J','K','L','M','N','P','R','T','U','V','W','X','Y'];                      \n          \t\tvar reverse_map = {'0' : 0,'1' : 1,'2' : 2,'3' : 3,'4' : 4,'5' : 5,\n                           '6' : 6,'7' : 7,'8' : 8,'9' : 9,\n                           'A' : 10,'C' : 11,'D' : 12,'E' : 13,'F' : 14,'G' : 15,\n                           'H' : 16,'J' : 17,'K' : 18,'L' : 19,'M' : 20,'N' : 21,\n                           'P' : 22,'R' : 23,'T' : 24,'U' : 25,'V' : 26,'W' : 27,\n                           'X' : 28,'Y' : 29};                           \n           \t\tvar decimal = 0;           \n           \t\tvar num = this.replace(/-/,'').split('').reverse();           \n           \t\tfor(var i = 0; i < num.length; i++){           \n              \t\t\tdecimal += reverse_map[num[i]] * Math.pow(30, i);            \n           \t\t}             \n           \t\treturn decimal;                 \n\t        };\n\t        var decimal = doc._id.trim().toDecimal();\t\n\t        if(String(parseInt(decimal / 10)).checkDigit() != (decimal % 10)){\n\t\t        emit(doc._id, null);\n\t        }\n        }"
+            }
+        },
+        "couchrest-hash": "3c8f8308380bb24dd14c7288ca7d042e"
+    },
+    {
+        "_id": "_design/Connection",
+        "language": "javascript",
+        "views": {
+            "by__id": {
+                "map": "                function(doc) {\n                  if ((doc['type'] == 'Connection') && (doc['_id'] != null)) {\n                    emit(doc['_id'], 1);\n                  }\n                }\n",
+                "reduce": "_sum"
+            },
+            "exists": {
+                "map": "function(doc){\n            if (doc['type'] == 'Connection' && (doc['source'] != '' && doc['source'] != null) && (doc['sink'] != '' && doc['sink'] != null) ){\n              emit([doc.source, doc.sink], {id: doc._id, source: doc.source, sink: doc.sink, created_at: doc.created_at, updated_at: doc.updated_at});\n            }\n          }"
+            },
+            "all": {
+                "map": "                function(doc) {\n                  if (doc['type'] == 'Connection') {\n                    emit(doc._id, null);\n                  }\n                }\n"
+            }
+        },
+        "couchrest-hash": "dc2f7e73599c4d11ea7c7b1a253140be"
+    },
+    {
+        "_id": "_design/Footprint",
+        "language": "javascript",
+        "views": {
+            "by__id": {
+                "map": "                function(doc) {\n                  if ((doc['type'] == 'Footprint') && (doc['_id'] != null)) {\n                    emit(doc['_id'], 1);\n                  }\n                }\n",
+                "reduce": "_sum"
+            },
+            "where_gone": {
+                "map": "function(doc) {\n            if (doc['type'] == 'Footprint') {\n              emit(doc.npid, {application: doc.application, site: doc.site_code, when: doc.updated_at});\n            }\n          }"
+            },
+            "existing": {
+                "map": "function(doc) {\n            if (doc['type'] == 'Footprint') {\n              emit([doc.npid, doc.application, doc.site_code, (new Date(doc.updated_at)).getFullYear(), ((new Date(doc.updated_at)).getMonth() + 1), (new Date(doc.updated_at)).getDate()], {application: doc.application, site: doc.site_code, when: doc.updated_at});\n            }\n          }"
+            },
+            "by_site": {
+                "map": "function(doc) {\n            if (doc['type'] == 'Footprint') {\n              emit(doc.site_code, {application: doc.application, site: doc.site_code, when: doc.updated_at});\n            }\n          }"
+            },
+            "by_origin": {
+                "map": "function(doc) {\n            if (doc['type'] == 'Footprint') {\n              emit([doc.origin, doc.site_code], {npid: doc.npid, application: doc.application, site: doc.site_code, when: doc.updated_at});\n            }\n          }"
+            },
+            "by_migration": {
+                "map": "function(doc) {\n            if (doc['type'] == 'Footprint' && doc.origin != doc.site_code && doc.origin != null) {\n              emit([doc.origin, doc.site_code], {npid: doc.npid, application: doc.application, site: doc.site_code, when: doc.updated_at});\n            }\n          }"
+            },
+            "all": {
+                "map": "                function(doc) {\n                  if (doc['type'] == 'Footprint') {\n                    emit(doc._id, null);\n                  }\n                }\n"
+            }
+        },
+        "couchrest-hash": "9311ec2f6238ef5e958921e513ee4bc2"
+    },
+    {
+        "_id": "_design/Site",
+        "language": "javascript",
+        "views": {
+            "by__id": {
+                "map": "                function(doc) {\n                  if ((doc['type'] == 'Site') && (doc['_id'] != null)) {\n                    emit(doc['_id'], 1);\n                  }\n                }\n",
+                "reduce": "_sum"
+            },
+            "list": {
+                "map": "function(doc){\n            if (doc['type'] == 'Site'){\n              emit(doc._id, {site_code: doc._id, name: doc.name, region: doc.region, x: doc.x, \n                y: doc.y, description: doc.description, threshold: doc.threshold,\n                batch_size: doc.batch_size, site_type: doc.site_type, ip_address: doc.ip_address,\n                site_id_count: doc.site_id_count});\n            }\n          }"
+            },
+            "all": {
+                "map": "                function(doc) {\n                  if (doc['type'] == 'Site') {\n                    emit(doc._id, null);\n                  }\n                }\n"
+            }
+        },
+        "couchrest-hash": "db024afea6ab7e48dbaf2e102a552b01"
+    }
+]}

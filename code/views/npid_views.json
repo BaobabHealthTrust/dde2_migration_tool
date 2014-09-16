@@ -1,0 +1,95 @@
+{"docs": [
+    {
+        "_id": "_design/Npid",
+        "language": "javascript",
+        "views": {
+            "by__id": {
+                "map": "                function(doc) {\n                  if ((doc['type'] == 'Npid') && (doc['_id'] != null)) {\n                    emit(doc['_id'], 1);\n                  }\n                }\n",
+                "reduce": "_sum"
+            },
+            "by_national_id": {
+                "map": "                function(doc) {\n                  if ((doc['type'] == 'Npid') && (doc['national_id'] != null)) {\n                    emit(doc['national_id'], 1);\n                  }\n                }\n",
+                "reduce": "_sum"
+            },
+            "by_site_code": {
+                "map": "                function(doc) {\n                  if ((doc['type'] == 'Npid') && (doc['site_code'] != null)) {\n                    emit(doc['site_code'], 1);\n                  }\n                }\n",
+                "reduce": "_sum"
+            },
+            "by_site_code_and_assigned": {
+                "map": "                function(doc) {\n                  if ((doc['type'] == 'Npid') && (doc['site_code'] != null) && (doc['assigned'] != null)) {\n                    emit([doc['site_code'], doc['assigned']], 1);\n                  }\n                }\n",
+                "reduce": "_sum"
+            },
+            "by_assigned": {
+                "map": "                function(doc) {\n                  if ((doc['type'] == 'Npid') && (doc['assigned'] != null)) {\n                    emit(doc['assigned'], 1);\n                  }\n                }\n",
+                "reduce": "_sum"
+            },
+            "unassigned_to_site": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['site_code'] == ''){\n                      emit(doc.national_id, null);\n                }\n              }"
+            },
+            "unassigned_at_site": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['site_code'] == 'KCH' && !doc.assigned ){\n                  emit(doc.national_id, null);\n                }\n              }"
+            },
+            "assigned_at_site": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['site_code'] == 'KCH' && doc.assigned ){\n                  emit(doc.national_id, null);\n                }\n              }"
+            },
+            "assigned_to_site": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['site_code'] == 'KCH' ){\n                  emit(doc.national_id, null);\n                }\n              }"
+            },
+            "unassigned_to_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && (doc['region'] == '' || doc['region'] == null)){\n                      emit(doc.national_id, null);\n                }\n              }"
+            },
+            "assigned_at_this_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'Centre' && (doc['site_code'] != '' && doc['site_code'] != null) && doc.assigned ){\n                  emit(doc.national_id, null);\n                }\n              }"
+            },
+            "assigned_at_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && (doc['site_code'] != '' && doc['site_code'] != null) && doc.assigned ){\n                  emit(doc.site_code, null);\n                }\n              }"
+            },
+            "assigned_to_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] != '' && doc['region'] != null ){\n                  emit(doc.site_code, null);\n                }\n              }"
+            },
+            "untaken_at_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] != '' && doc['region'] != null && (doc['site_code'] != '' && doc['site_code'] != null) && !doc.assigned ){\n                  emit(doc.site_code, null);\n                }\n              }"
+            },
+            "unassigned_at_central_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'Centre' && (doc['site_code'] == '' || doc['site_code'] == null) ){\n                  emit(doc.region, null);\n                }\n              }"
+            },
+            "assigned_at_central_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'Centre' && (doc['site_code'] != '' && doc['site_code'] != null) && doc.assigned ){\n                  emit(doc.national_id, null);\n                }\n              }"
+            },
+            "allocated_to_central_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'Centre' ){\n                  emit(doc.national_id, null);\n                }\n              }"
+            },
+            "available_at_central_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'Centre' && (doc['site_code'] != '' && doc['site_code'] != null) && !doc.assigned ){\n                  emit(doc.region, null);\n                }\n              }"
+            },
+            "unassigned_at_northern_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'North' && (doc['site_code'] == '' || doc['site_code'] == null) ){\n                  emit(doc.region, null);\n                }\n              }"
+            },
+            "assigned_at_northern_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'North' && (doc['site_code'] != '' && doc['site_code'] != null) && doc.assigned ){\n                  emit(doc.national_id, null);\n                }\n              }"
+            },
+            "allocated_to_northern_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'North' ){\n                  emit(doc.national_id, null);\n                }\n              }"
+            },
+            "available_at_northern_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'North' && (doc['site_code'] != '' && doc['site_code'] != null) && !doc.assigned ){\n                  emit(doc.region, null);\n                }\n              }"
+            },
+            "unassigned_at_southern_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'South' && (doc['site_code'] == '' || doc['site_code'] == null) ){\n                  emit(doc.region, null);\n                }\n              }"
+            },
+            "assigned_at_southern_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'South' && (doc['site_code'] != '' && doc['site_code'] != null) && doc.assigned ){\n                  emit(doc.national_id, null);\n                }\n              }"
+            },
+            "allocated_to_southern_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'South' ){\n                  emit(doc.national_id, null);\n                }\n              }"
+            },
+            "available_at_southern_region": {
+                "map": "function(doc){\n                if (doc['type'] == 'Npid' && doc['region'] == 'South' && (doc['site_code'] != '' && doc['site_code'] != null) && !doc.assigned ){\n                  emit(doc.region, null);\n                }\n              }"
+            },
+            "all": {
+                "map": "                function(doc) {\n                  if (doc['type'] == 'Npid') {\n                    emit(doc._id, null);\n                  }\n                }\n"
+            }
+        },
+        "couchrest-hash": "04247948719e66629c5ada2a54ad4cfd"
+    }
+]}

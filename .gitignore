@@ -1,0 +1,9 @@
+*.yml
+code/dumps/*
+code/log/*
+code/data/*
+code/reports
+code/updates
+code/backups
+code/merges
+*.lock

@@ -1,0 +1,38 @@
+npids_mysql_source:
+  username: root
+  password: admin
+  host: localhost
+  port: 3306
+  database: dde_analysis
+  table: npids
+  field: npid
+
+mysql:
+  username: root
+  password: admin
+  host: localhost
+  port: 3306
+  
+couchdb:
+  npids_database: dde_migration
+  person_database: dde_person_migration
+  username: admin
+  password: test
+  host: localhost
+  port: 5984
+  
+target:
+  databases: dde_site_1,dde_site_2
+  
+applications:
+  dde_site_1:
+    host: localhost
+    database: openmrs_site_1
+    username: user
+    password: pass
+  dde_site_2:
+    host: localhost
+    database: openmrs_site_2
+    username: user
+    password: pass
+    
