@@ -292,7 +292,7 @@ module Seeding
 
       puts
 
-      `curl "http://#{host}:#{port}/#{npids_db}/_design/Person/_view/all -s"`
+      `curl "http://#{host}:#{port}/#{person_db}/_design/Person/_view/all -s"`
 
       system("clear")
 
@@ -300,7 +300,7 @@ module Seeding
 
       puts
 
-      `curl "http://#{host}:#{port}/#{npids_db}/_design/Connection/_view/all -s"`
+      `curl "http://#{host}:#{port}/#{person_db}/_design/Connection/_view/all -s"`
 
       system("clear")
 
@@ -308,7 +308,7 @@ module Seeding
 
       puts
 
-      `curl "http://#{host}:#{port}/#{npids_db}/_design/Footprint/_view/all -s"`
+      `curl "http://#{host}:#{port}/#{person_db}/_design/Footprint/_view/all -s"`
 
       system("clear")
 
@@ -316,7 +316,7 @@ module Seeding
 
       puts
 
-      `curl "http://#{host}:#{port}/#{npids_db}/_design/Site/_view/all -s"`
+      `curl "http://#{host}:#{port}/#{person_db}/_design/Site/_view/all -s"`
 
       system("clear")
 

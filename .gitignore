@@ -6,4 +6,6 @@ code/reports
 code/updates
 code/backups
 code/merges
+code/tmp
+code/seed
 *.lock
