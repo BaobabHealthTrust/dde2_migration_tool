@@ -235,15 +235,15 @@ def init(migrate, filtered=false, merge_as_well=false, pre_merge_report=false)
 
       puts "\t\tNewly Added:\t\t\t#{db_counts[db]["inserts"]}"
 
-      file.write("\t\tNewly Added:\t\t\t#{db_counts[db]["inserts"]}\n")
+      file.write("\t\tNewly Added:\t\t\t\t\t\t#{db_counts[db]["inserts"]}\n")
 
       puts "\t\tNewly Updated:\t\t\t#{db_counts[db]["updates"]}"
 
-      file.write("\t\tNewly Updated:\t\t\t#{db_counts[db]["updates"]}\n")
+      file.write("\t\tNewly Updated:\t\t\t\t\t#{db_counts[db]["updates"]}\n")
 
       puts "\t\tNewly Allocated:\t\t#{db_counts[db]["allocations"]}"
 
-      file.write("\t\tNewly Allocated:\t\t#{db_counts[db]["allocations"]}\n")
+      file.write("\t\tNewly Allocated:\t\t\t\t#{db_counts[db]["allocations"]}\n")
 
       puts "\t\t-------------------------------------------------------------"
 
@@ -251,19 +251,19 @@ def init(migrate, filtered=false, merge_as_well=false, pre_merge_report=false)
 
       puts "\t\tAllocated:\t\t\t#{allocated}"
 
-      file.write("\t\tAllocated:\t\t\t#{allocated}\n")
+      file.write("\t\tAllocated:\t\t\t\t\t\t\t#{allocated}\n")
 
       puts "\t\tAssigned:\t\t\t#{assigned}"
 
-      file.write("\t\tAssigned:\t\t\t#{assigned}\n")
+      file.write("\t\tAssigned:\t\t\t\t\t\t\t\t#{assigned}\n")
 
-      puts "\t\tClaimed spot:\t\t\t#{claimed_spot}"
+      puts "\t\tClaimed spot:\t\t\t\t#{claimed_spot}"
 
-      file.write("\t\tClaimed spot:\t\t\t#{claimed_spot}\n")
+      file.write("\t\tClaimed spot:\t\t\t\t\t#{claimed_spot}\n")
 
       puts "\t\tAvailable:\t\t\t#{available}"
 
-      file.write("\t\tAvailable:\t\t\t#{available}\n")
+      file.write("\t\tAvailable:\t\t\t\t\t\t\t#{available}\n")
 
       puts "\t\tIn-conflict:\n\t\t\tAllocation Conflict:\t#{allocation_conflict}\n\t\t\tRemote Conflict:\t#{remote_conflict}\n\t\t\tSite Conflict:\t\t#{site_conflict}\n\t\t\tTotal In-conflict:\t#{allocation_conflict.to_i + remote_conflict.to_i + site_conflict.to_i}\n\n"
 
@@ -271,19 +271,19 @@ def init(migrate, filtered=false, merge_as_well=false, pre_merge_report=false)
 
       file.write("\t\t\tAllocation Conflict:\t#{allocation_conflict}\n")
 
-      file.write("\t\t\tRemote Conflict:\t#{remote_conflict}\n")
+      file.write("\t\t\tRemote Conflict:\t\t\t#{remote_conflict}\n")
 
-      file.write("\t\t\tSite Conflict:\t\t#{site_conflict}\n")
+      file.write("\t\t\tSite Conflict:\t\t\t\t#{site_conflict}\n")
 
-      file.write("\t\t\tTotal In-conflict:\t#{allocation_conflict.to_i + remote_conflict.to_i + site_conflict.to_i}\n\n")
+      file.write("\t\t\tTotal In-conflict:\t\t#{allocation_conflict.to_i + remote_conflict.to_i + site_conflict.to_i}\n\n")
 
       puts "\t\tInvalid:\t\t\t#{invalid}"
 
-      file.write("\t\tInvalid:\t\t\t#{invalid}\n")
+      file.write("\t\tInvalid:\t\t\t\t\t\t\t\t#{invalid}\n")
 
       puts "\t\tSkips:\t\t\t\t#{skips}"
 
-      file.write("\t\tSkips:\t\t\t#{skips}\n")
+      file.write("\t\tSkips:\t\t\t\t\t\t\t\t\t#{skips}\n")
 
     end
 
