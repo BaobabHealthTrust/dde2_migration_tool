@@ -180,6 +180,7 @@ module Merges
         written_npids = {}
         written_voids = {}
         written_skips = {}
+        written_merged = {}
 
         lines.each do |line|
 
@@ -347,7 +348,9 @@ module Merges
 
                 j += 1
 
-                Utils::Files.log("#{@current_folder}_merged", "MERGED", " #{hash[pid]}")
+                Utils::Files.log("#{@current_folder}_merged", "MERGED", " #{hash[pid]}") if !written_merged[hash[pid]]
+
+                written_merged[hash[pid]] = true
 
                 if j == @file_limit
 
