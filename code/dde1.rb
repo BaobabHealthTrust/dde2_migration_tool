@@ -173,6 +173,35 @@ module DDE1
       json["names"]["family_name_code"] = json["names"]["family_name"].soundex rescue nil
       
       json["birthdate"] = data[8]
+
+      json["addresses"]["home_district"] = (json["addresses"]["address2"] rescue nil)
+
+      json["addresses"].delete("address2") rescue nil
+
+      json["addresses"]["home_ta"] = (json["addresses"]["county_district"] rescue nil)
+
+      json["addresses"].delete("county_district") rescue nil
+
+      json["addresses"]["home_village"] = (json["addresses"]["neighborhood_cell"] rescue nil)
+
+      json["addresses"].delete("neighborhood_cell") rescue nil
+
+      json["addresses"]["current_district"] = (json["addresses"]["state_province"] rescue nil)
+
+      json["addresses"].delete("state_province") rescue nil
+
+      json["addresses"]["current_ta"] = (json["addresses"]["township_division"] rescue nil)
+
+      json["addresses"].delete("township_division") rescue nil
+
+      json["addresses"]["current_village"] = (json["addresses"]["city_village"] rescue nil)
+
+      json["addresses"].delete("city_village") rescue nil
+
+      json["addresses"]["current_residence"] = (json["addresses"]["address1"] rescue nil)
+
+      json["addresses"].delete("address1") rescue nil
+
                  
       # Load site id in 'people' table in case we don't have one in 'npids' table           
       json["assigned_site"] = @sites[data[10].to_s.strip] # rescue nil
