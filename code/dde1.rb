@@ -174,6 +174,8 @@ module DDE1
       
       json["birthdate"] = data[8]
 
+      json["birthdate_estimated"] = (json["birthdate_estimated"].to_s.strip == '1' ? true : false)
+
       json["addresses"]["home_district"] = (json["addresses"]["address2"] rescue nil)
 
       json["addresses"].delete("address2") rescue nil
