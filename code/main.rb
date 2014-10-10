@@ -55,9 +55,13 @@ def init(migrate, filtered=false, merge_as_well=false, pre_merge_report=false)
         $stdout.flush
 
         # Bulk insert into CouchDB
-        t = Thread.new { `curl -H "Content-Type:application/json" -X POST -d @./dumps/#{db}/#{file} http://#{settings["couchdb"]["host"]}:#{settings["couchdb"]["port"]}/#{settings["couchdb"]["person_database"]}/_bulk_docs -s > ./log/inserts_#{file}.log` }
+        # t = Thread.new {
 
-        t.join
+        `curl -H "Content-Type:application/json" -X POST -d @./dumps/#{db}/#{file} http://#{settings["couchdb"]["host"]}:#{settings["couchdb"]["port"]}/#{settings["couchdb"]["person_database"]}/_bulk_docs -s > ./log/inserts_#{file}.log`
+
+        #}
+
+        # t.join
 
       end
 
@@ -71,9 +75,13 @@ def init(migrate, filtered=false, merge_as_well=false, pre_merge_report=false)
           $stdout.flush
 
           # Bulk insert into CouchDB
-          t = Thread.new { `curl -H "Content-Type:application/json" -X POST -d @./updates/#{db}/#{file} http://#{settings["couchdb"]["host"]}:#{settings["couchdb"]["port"]}/#{settings["couchdb"]["npids_database"]}/_bulk_docs -s > ./log/updates_#{file}.log` }
+          # t = Thread.new {
 
-          t.join
+          `curl -H "Content-Type:application/json" -X POST -d @./updates/#{db}/#{file} http://#{settings["couchdb"]["host"]}:#{settings["couchdb"]["port"]}/#{settings["couchdb"]["npids_database"]}/_bulk_docs -s > ./log/updates_#{file}.log`
+
+          #}
+
+          # t.join
 
         end
 
@@ -338,9 +346,13 @@ def init(migrate, filtered=false, merge_as_well=false, pre_merge_report=false)
           $stdout.flush
 
           # Bulk insert into CouchDB
-          t = Thread.new { `curl -H "Content-Type:application/json" -X POST -d @./merges/#{site}/#{file} http://#{dde_host}:#{dde_port}/#{dde_db}/_bulk_docs -s > ./log/merges_#{file}.log` }
+          #t = Thread.new {
 
-          t.join
+          `curl -H "Content-Type:application/json" -X POST -d @./merges/#{site}/#{file} http://#{dde_host}:#{dde_port}/#{dde_db}/_bulk_docs -s > ./log/merges_#{file}.log`
+
+            #}
+
+          #t.join
 
         end
 
