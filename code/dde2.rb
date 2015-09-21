@@ -1,6 +1,7 @@
 require "json"
 require "rest-client"
 require "yaml"
+require "./utils"
 
 # Parse a JSON object
 
@@ -54,8 +55,13 @@ module DDE2
       @current_person = nil
     
       # result = JSON.parse(`curl -X GET "http://#{@host}:#{@port}/#{@db_npids}/_design/Npid/_view/by_national_id?key=%22#{npid}%22&reduce=false&include_docs=true" -s`)
-      result = JSON.parse(RestClient.get("http://#{@host}:#{@port}/#{@db_npids}/_design/Npid/_view/by_national_id?key=%22#{npid}%22&reduce=false&include_docs=true")) rescue nil
-    
+
+      query = RestClient.get("http://#{@host}:#{@port}/#{@db_npids}/_design/Npid/_view/by_national_id?key=%22#{npid}%22&reduce=false&include_docs=true")
+
+      result = JSON.parse(query) rescue nil
+
+      Utils::Files.log("#{@current_folder}_queries", "QUERY", "#{npid} : #{query}\n\t\t#{result}")
+
       if !result.nil? and !result["rows"].nil? and result["rows"].length > 0
       
         @current_npid = result["rows"][0]["doc"]

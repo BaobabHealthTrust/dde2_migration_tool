@@ -317,7 +317,10 @@ module DDE1
               json["assigned_site"] = @identifiers[json["person_id"]]["assigned"]["site"] rescue nil if !(@identifiers[json["person_id"]]["assigned"]["site"] rescue nil ).nil?    
                    
               state = dde2.current_state(npid.strip)
-              
+
+              # Delay slightly to avoid denial of service overloading
+              # sleep 10
+
               # Log initial state
               Utils::Files.log("#{@current_folder}_states", "INITIAL STATE", "#{npid}: #{state}")
                      
