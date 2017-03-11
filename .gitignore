@@ -9,3 +9,4 @@ code/merges
 code/tmp
 code/seed
 *.lock
+.idea/
