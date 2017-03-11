@@ -4,8 +4,8 @@ npids_mysql_source:
   host: localhost
   port: 3306
   database: dde_analysis
-  table: npids
-  field: npid
+  table: national_patient_identifiers
+  field: value
 
 mysql:
   username: root
