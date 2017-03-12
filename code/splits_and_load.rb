@@ -14,17 +14,19 @@ module Seeding
 
       puts "ERROR: Configuration file not found. Aborting!" and return if !File.exists?("./databases.yml")
 
-      settings = YAML.load_file("./databases.yml")["npids_mysql_source"] rescue {}
+      settings = YAML.load_file("./databases.yml") rescue {}
 
-      host = settings["host"]
-      port = settings["port"]
-      db = settings["database"]
-      username = settings["username"]
-      password = settings["password"]
-      table = settings["table"]
-      field = settings["field"]
+      host = settings["npids_mysql_source"]["host"]
+      port = settings["npids_mysql_source"]["port"]
+      db = settings["npids_mysql_source"]["database"]
+      username = settings["npids_mysql_source"]["username"]
+      password = settings["npids_mysql_source"]["password"]
+      table = settings["npids_mysql_source"]["table"]
+      field = settings["npids_mysql_source"]["field"]
 
-      puts "ERROR: Configuration file not complete. Aborting!" and return if host.nil? or port.nil? or db.nil? or username.nil? or password.nil? or table.nil? or field.nil?
+      target_table = settings["target"]["databases"].keys.first rescue nil
+
+      puts "ERROR: Configuration file not complete. Aborting!" and return if host.nil? or port.nil? or db.nil? or username.nil? or password.nil? or table.nil? or field.nil? or target_table.nil?
 
       system("clear")
 
@@ -36,7 +38,7 @@ module Seeding
 
       puts "Extracting data from MySQL database..."
 
-      `mysql -h #{host} -P #{port} -u #{username} -p#{password} #{db} -e "SELECT DISTINCT(#{field}) FROM #{table}" > ./tmp/integrated_npids.txt`
+      `mysql -h #{host} -P #{port} -u #{username} -p#{password} #{db} -e "SELECT DISTINCT(#{field}) FROM #{table} WHERE #{field} IN (SELECT #{field} FROM #{target_table}.#{table})" > ./tmp/integrated_npids.txt`
 
       system("clear")
 
