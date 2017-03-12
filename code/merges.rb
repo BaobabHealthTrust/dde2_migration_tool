@@ -40,7 +40,7 @@ module Merges
 
       elsif table == "patient_identifier_type"
 
-        `mysql -h #{@host} -u #{@username} -p#{@password} #{@db} -e "SELECT CONCAT(patient_identifier_type_id, '|', name) FROM openmrs_kawale.patient_identifier_type" > ./data/#{folder}/patient_identifier_type.sql`
+        `mysql -h #{@host} -u #{@username} -p#{@password} #{@db} -e "SELECT CONCAT(patient_identifier_type_id, '|', name) FROM patient_identifier_type" > ./data/#{folder}/patient_identifier_type.sql`
 
       end
 
